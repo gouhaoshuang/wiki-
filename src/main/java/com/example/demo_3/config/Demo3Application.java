@@ -1,11 +1,13 @@
-package com.example.demo_3;
+package com.example.demo_3.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.ComponentScan;
 
+import org.springframework.core.env.Environment;
+@ComponentScan("com.example.demo_3")
 @SpringBootApplication
 public class Demo3Application {
 

@@ -1,12 +1,8 @@
 package com.example.demo_3.controller;
-
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 public class testController {
-
     /*
     restful风格请求：
     原本样式：/user/id=1
