@@ -1,4 +1,6 @@
 package com.example.demo_3.controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
@@ -8,16 +10,21 @@ public class testController {
     原本样式：/user/id=1
     restful风格：/user/1
     GET , POST , PUT , DELETE
-
      */
-    // @GetMapping  获取注释
-    //PostMapping   修改注释
-    //PutMapping    新增注释
-    //DeleteMapping   删除注释
-    //RequestMapping   包括了以上四种注释，通常可以直接用RequestMapping 来代替。
-    @RequestMapping("/Hello")
+    /*
+      @GetMapping: 用于处理HTTP GET请求。通常用于获取数据。
+    @PostMapping: 用于处理HTTP POST请求。通常用于提交数据以创建新的资源。
+    @PutMapping: 用于处理HTTP PUT请求。通常用于更新现有资源的全部数据。
+    @DeleteMapping: 用于处理HTTP DELETE请求。通常用于删除资源。
+    @RequestMapping: 这是一种通用注解，可以处理所有类型的HTTP请求。
+    */
+    @RequestMapping("/hello")
     public String hello(){
-
         return "hello World";
+    }
+
+    @PostMapping("/hello/post")
+    public String hellopost(String name){
+        return "hello World"+name;
     }
 }
