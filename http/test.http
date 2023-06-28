@@ -15,7 +15,7 @@ client.test("test-hello", function() {
 POST http://localhost:8880/hello/post
 Content-Type: application/x-www-form-urlencoded
 
-name=abd
+name=wfwef
 
 ###
 

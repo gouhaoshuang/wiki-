@@ -20,11 +20,11 @@ public class testController {
     */
     @RequestMapping("/hello")
     public String hello(){
-        return "hello World";
+        return "hefsefsgrgerlglo World 2e";
     }
 
     @PostMapping("/hello/post")
     public String hellopost(String name){
-        return "hello World"+name;
+        return "helflo Worlfwd"+name;
     }
 }
