@@ -1,10 +1,18 @@
 package com.example.demo_3.controller;
 
+import com.example.demo_3.domain.Test;
+import com.example.demo_3.service.TestService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
+
 @RestController
 public class testController {
+
     /*
     restful风格请求：
     原本样式：/user/id=1
@@ -20,6 +28,7 @@ public class testController {
     */
     @RequestMapping("/hello")
     public String hello(){
+
         return "hefsefsgrgerlglo World 2e";
     }
 
@@ -27,4 +36,14 @@ public class testController {
     public String hellopost(String name){
         return "helflo Worlfwd"+name;
     }
+
+    @Resource
+    private TestService testService;
+
+    @GetMapping("/test/list")
+    public List<Test> list(){
+        return testService.list();
+    }
+
+
 }
