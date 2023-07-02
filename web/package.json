@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve-dev": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev --port 8081",
+    "serve-dev": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev --port 8085",
     "serve-prod": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode prod",
     "build-dev": "SET NODE_OPTIONS=--openssl-legacy-provider &&vue-cli-service build --mode dev",
     "build-prod": "SET NODE_OPTIONS=--openssl-legacy-provider &&vue-cli-service build --mode prod",
