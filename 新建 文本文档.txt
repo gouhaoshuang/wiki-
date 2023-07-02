@@ -1,0 +1,5 @@
+    "serve": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+
+
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/reset.css';
