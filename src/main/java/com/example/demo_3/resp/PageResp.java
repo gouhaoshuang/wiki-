@@ -4,8 +4,6 @@ import java.util.List;
 
 public class PageResp<T> {
 
-
-
     private long total;
 
     private List<T> list;
@@ -18,6 +16,8 @@ public class PageResp<T> {
         this.total = total;
     }
 
+
+
     public List<T> getList() {
         return list;
     }
@@ -25,7 +25,6 @@ public class PageResp<T> {
     public void setList(List<T> list) {
         this.list = list;
     }
-
     @Override
     public String toString() {
         return "PageResp{" +
@@ -33,6 +32,3 @@ public class PageResp<T> {
                 ", list=" + list +
                 '}';
     }
-
-
-}
