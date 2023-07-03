@@ -1,6 +1,9 @@
 <template>
   <a-layout>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+      <a-button type="primary" @click="add()" size="large">
+        新增
+      </a-button>
       <a-table
           :columns="columns"
           :row-key="record => record.id"
@@ -10,7 +13,7 @@
           @change="handleTableChange"
       >
         <template #cover="{ text:cover }">
-          <img  class = "img" v-if="cover" :src="cover" alt="avatar"/>
+          <img class="img" v-if="cover" :src="cover" alt="avatar"/>
         </template>
 
         <template v-slot:action="{ text, record }">
@@ -31,22 +34,22 @@
       title="电子书表单"
       v-model:visible="modalVisible"
       @ok="handleModalOk">
-        <a-form :model="ebook" :label-col="{ span: 6}">
-          <a-form-item label="封面" >
-             <a-input v-model:value="ebook.cover" />
-          </a-form-item>
-          <a-form-item label="名称" >
-             <a-input v-model:value="ebook.name" />
-          </a-form-item>
-          <a-form-item label="分类一" >
-             <a-input v-model:value="ebook.category1Id" />
-          </a-form-item>
-          <a-form-item label="分类二" >
-             <a-input v-model:value="ebook.category2Id" />
-          </a-form-item>
-          <a-form-item label="描述" >
-             <a-input v-model:value="ebook.desc" type = "text" />
-          </a-form-item>
+    <a-form :model="ebook" :label-col="{ span: 6}">
+      <a-form-item label="封面">
+        <a-input v-model:value="ebook.cover"/>
+      </a-form-item>
+      <a-form-item label="名称">
+        <a-input v-model:value="ebook.name"/>
+      </a-form-item>
+      <a-form-item label="分类一">
+        <a-input v-model:value="ebook.category1Id"/>
+      </a-form-item>
+      <a-form-item label="分类二">
+        <a-input v-model:value="ebook.category2Id"/>
+      </a-form-item>
+      <a-form-item label="描述">
+        <a-input v-model:value="ebook.desc" type="text"/>
+      </a-form-item>
     </a-form>
   </a-modal>
 
@@ -113,9 +116,9 @@ export default defineComponent({
     const handleQuery = (params: any) => {
       loading.value = true;
       axios.get("/ebook/list", {
-        params:{
-          page:params.page,
-          size:params.size
+        params: {
+          page: params.page,
+          size: params.size
         }
       }).then((response) => {
         loading.value = false;
@@ -123,7 +126,7 @@ export default defineComponent({
         ebooks.value = data.content.list;
         //重置分页按钮
         pagination.value.current = params.pages;
-        pagination.value.total =  data.content.total;
+        pagination.value.total = data.content.total;
       });
     };
     const handleTableChange = (pagination: any) => {
@@ -140,26 +143,49 @@ export default defineComponent({
     const ebook = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    const handleModalOk = () =>{
+    const handleModalOk = () => {
       modalLoading.value = true;
-      setTimeout(()=>{
-        modalLoading.value = false;
-        modalVisible.value = false;
-      },50);
+      console.log("请求前");
+      axios.post("/ebook/save", ebook.value).then((response) => {
+        console.log("请求后");
+        const data = response.data;  //data = commonResp
+        if(data.success){
+          modalLoading.value = false;
+          modalVisible.value = false;
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+
+        }
+      });
+
     };
 
-    const edit = (record : any) =>{
+    /**
+     * 修改
+     */
+    const edit = (record: any) => {
       modalVisible.value = true;
       ebook.value = record;
+    }
+    /**
+     *新增
+     */
+    const add = () => {
+      modalVisible.value = true;
+      ebook.value = {};
     }
 
 
     onMounted(() => {
-      handleQuery({
-        page:1,
-        size:pagination.value.pageSize
-      });
-    })
+          handleQuery({
+            page: 1,
+            size: pagination.value.pageSize
+          });
+        }
+    )
 
     return {
       ebooks,
@@ -167,7 +193,10 @@ export default defineComponent({
       columns,
       loading,
       handleTableChange,
+
       edit,
+      add,
+
       handleModalOk,
       modalVisible,
       modalLoading,
@@ -176,12 +205,13 @@ export default defineComponent({
     }
 
   }
-});
+})
+;
 </script>
 
 <style scoped>
 .img {
-  width: 100px;
+  width: 50px;
   vertical-align: middle;
   border-style: none;
 }
