@@ -3,7 +3,8 @@ package com.example.demo_3.service;
 import com.example.demo_3.domain.Ebook;
 import com.example.demo_3.domain.EbookExample;
 import com.example.demo_3.mapper.EbookMapper;
-import com.example.demo_3.req.EbookReq;
+import com.example.demo_3.req.EbookQueryReq;
+import com.example.demo_3.req.EbookSaveReq;
 import com.example.demo_3.resp.EbookResp;
 import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.util.CopyUtil;
@@ -28,7 +29,7 @@ public class EbookService {
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
 
-    public PageResp<EbookResp> list(EbookReq req){
+    public PageResp<EbookResp> list(EbookQueryReq req){
 
         EbookExample ebookExample = new EbookExample();
 
@@ -60,5 +61,15 @@ public class EbookService {
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
+    }
+
+    public void save(EbookSaveReq req){
+        Ebook ebook = CopyUtil.copy(req,Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())){
+            ebookMapper.insert(ebook);
+        }else {
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
+
     }
 }
