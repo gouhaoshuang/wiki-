@@ -3,8 +3,9 @@ package com.example.demo_3.service;
 import com.example.demo_3.domain.Ebook;
 import com.example.demo_3.domain.EbookExample;
 import com.example.demo_3.mapper.EbookMapper;
-import com.example.demo_3.req.EbookReq;
-import com.example.demo_3.resp.EbookResp;
+import com.example.demo_3.req.EbookQueryReq;
+import com.example.demo_3.req.EbookSaveReq;
+import com.example.demo_3.resp.EbookQueryResp;
 import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -28,7 +29,7 @@ public class EbookService {
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
 
-    public PageResp<EbookResp> list(EbookReq req){
+    public PageResp<EbookQueryResp> list(EbookQueryReq req){
 
         EbookExample ebookExample = new EbookExample();
 
@@ -55,10 +56,20 @@ public class EbookService {
 //            EbookResp ebookResp = CopyUtil.copy(ebook,EbookResp.class);
 //            respList.add(ebookResp);
 //        }
-        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        PageResp<EbookResp> pageResp = new PageResp();
+        List<EbookQueryResp> list = CopyUtil.copyList(ebookList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp = new PageResp();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
+    }
+
+    public void save(EbookSaveReq req){
+        Ebook ebook = CopyUtil.copy(req,Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())){
+            ebookMapper.insert(ebook);
+        }else {
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
+
     }
 }
