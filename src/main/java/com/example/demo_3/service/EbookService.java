@@ -5,6 +5,7 @@ import com.example.demo_3.domain.EbookExample;
 import com.example.demo_3.mapper.EbookMapper;
 import com.example.demo_3.req.EbookReq;
 import com.example.demo_3.resp.EbookResp;
+import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,7 +28,7 @@ public class EbookService {
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
 
-    public List<EbookResp> list(EbookReq req){
+    public PageResp<EbookResp> list(EbookReq req){
 
         EbookExample ebookExample = new EbookExample();
 
@@ -36,7 +37,7 @@ public class EbookService {
             criteria.andNameLike("%"+req.getName()+"%");
         }
 
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
 
@@ -55,6 +56,9 @@ public class EbookService {
 //            respList.add(ebookResp);
 //        }
         List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        return list;
+        PageResp<EbookResp> pageResp = new PageResp();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        return pageResp;
     }
 }
