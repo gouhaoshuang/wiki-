@@ -8,6 +8,7 @@ import com.example.demo_3.req.EbookSaveReq;
 import com.example.demo_3.resp.EbookQueryResp;
 import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.util.CopyUtil;
+import com.example.demo_3.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -28,7 +29,8 @@ public class EbookService {
     private EbookMapper ebookMapper;
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
-
+    @Resource
+    private SnowFlake snowFlake;
     public PageResp<EbookQueryResp> list(EbookQueryReq req){
 
         EbookExample ebookExample = new EbookExample();
@@ -66,7 +68,9 @@ public class EbookService {
     public void save(EbookSaveReq req){
         Ebook ebook = CopyUtil.copy(req,Ebook.class);
         if(ObjectUtils.isEmpty(req.getId())){
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
+
         }else {
             ebookMapper.updateByPrimaryKey(ebook);
         }
