@@ -31,6 +31,7 @@ public class EbookService {
 
     @Resource
     private SnowFlake snowFlake;
+
     public PageResp<EbookQueryResp> list(EbookQueryReq req){
 
         EbookExample ebookExample = new EbookExample();
