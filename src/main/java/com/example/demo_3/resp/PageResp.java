@@ -17,7 +17,6 @@ public class PageResp<T> {
     }
 
 
-
     public List<T> getList() {
         return list;
     }
@@ -25,6 +24,7 @@ public class PageResp<T> {
     public void setList(List<T> list) {
         this.list = list;
     }
+
     @Override
     public String toString() {
         return "PageResp{" +
@@ -32,3 +32,4 @@ public class PageResp<T> {
                 ", list=" + list +
                 '}';
     }
+}
