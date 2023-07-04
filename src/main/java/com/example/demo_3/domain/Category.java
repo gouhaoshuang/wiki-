@@ -1,5 +1,6 @@
 package com.example.demo_3.domain;
 
+
 public class Category {
     private Long id;
 
@@ -23,6 +24,7 @@ public class Category {
 
     public void setParent(String parent) {
         this.parent = parent;
+
     }
 
     public String getName() {
@@ -40,6 +42,7 @@ public class Category {
     public void setSort(String sort) {
         this.sort = sort;
     }
+
 
     @Override
     public String toString() {
