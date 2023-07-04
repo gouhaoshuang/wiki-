@@ -1,11 +1,13 @@
-package com.example.demo_3.domain;
+package com.example.demo_3.req;
 
-public class Test {
+public class CategoryQueryReq extends PageReq {
     private Long id;
+
+    private String parent;
 
     private String name;
 
-    private String password;
+    private String sort;
 
     public Long getId() {
         return id;
@@ -13,6 +15,14 @@ public class Test {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
     }
 
     public String getName() {
@@ -23,12 +33,12 @@ public class Test {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSort() {
+        return sort;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     @Override
@@ -38,8 +48,9 @@ public class Test {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", parent=").append(parent);
         sb.append(", name=").append(name);
-        sb.append(", password=").append(password);
+        sb.append(", sort=").append(sort);
         sb.append("]");
         return sb.toString();
     }

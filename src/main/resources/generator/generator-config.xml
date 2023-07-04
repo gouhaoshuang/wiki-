@@ -40,9 +40,11 @@
                              targetPackage="com.example.demo_3.mapper"
                              type="XMLMAPPER"/>
 
-        <!--<table tableName="demo" domainObjectName="Demo"/>-->
-        <table tableName="ebook"/>
-        <!--<table tableName="category"/>-->
+<!--        <table tableName="demo" domainObjectName="Demo"/>-->
+        <table tableName="test" domainObjectName="Test"/>
+        <table tableName="categorys" domainObjectName="Category"/>
+<!--        <table tableName="ebook"/>-->
+<!--        <table tableName="category"/>-->
         <!--<table tableName="doc"/>-->
         <!--<table tableName="content"/>-->
         <!--<table tableName="user"/>-->

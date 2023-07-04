@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo_3.mapper.TestMapper">
-  <resultMap id="BaseResultMap" type="com.example.demo_3.domain.Test">
+<mapper namespace="com.example.demo_3.mapper.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo_3.domain.Category">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="parent" jdbcType="VARCHAR" property="parent" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, `password`
+    id, parent, `name`, sort
   </sql>
-  <select id="selectByExample" parameterType="com.example.demo_3.domain.TestExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.example.demo_3.domain.CategoryExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from test
+    from categorys
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,67 +85,76 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from test
+    from categorys
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from test
+    delete from categorys
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.example.demo_3.domain.TestExample">
-    delete from test
+  <delete id="deleteByExample" parameterType="com.example.demo_3.domain.CategoryExample">
+    delete from categorys
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.example.demo_3.domain.Test">
-    insert into test (id, `name`, `password`
-      )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.example.demo_3.domain.Category">
+    insert into categorys (id, parent, `name`, 
+      sort)
+    values (#{id,jdbcType=BIGINT}, #{parent,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.demo_3.domain.Test">
-    insert into test
+  <insert id="insertSelective" parameterType="com.example.demo_3.domain.Category">
+    insert into categorys
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
+      <if test="parent != null">
+        parent,
+      </if>
       <if test="name != null">
         `name`,
       </if>
-      <if test="password != null">
-        `password`,
+      <if test="sort != null">
+        sort,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="parent != null">
+        #{parent,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.demo_3.domain.TestExample" resultType="java.lang.Long">
-    select count(*) from test
+  <select id="countByExample" parameterType="com.example.demo_3.domain.CategoryExample" resultType="java.lang.Long">
+    select count(*) from categorys
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update test
+    update categorys
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.parent != null">
+        parent = #{record.parent,jdbcType=VARCHAR},
+      </if>
       <if test="record.name != null">
         `name` = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.password != null">
-        `password` = #{record.password,jdbcType=VARCHAR},
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,30 +162,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update test
+    update categorys
     set id = #{record.id,jdbcType=BIGINT},
+      parent = #{record.parent,jdbcType=VARCHAR},
       `name` = #{record.name,jdbcType=VARCHAR},
-      `password` = #{record.password,jdbcType=VARCHAR}
+      sort = #{record.sort,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo_3.domain.Test">
-    update test
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo_3.domain.Category">
+    update categorys
     <set>
+      <if test="parent != null">
+        parent = #{parent,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         `name` = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        `password` = #{password,jdbcType=VARCHAR},
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.demo_3.domain.Test">
-    update test
-    set `name` = #{name,jdbcType=VARCHAR},
-      `password` = #{password,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKey" parameterType="com.example.demo_3.domain.Category">
+    update categorys
+    set parent = #{parent,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
