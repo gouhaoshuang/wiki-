@@ -31,7 +31,6 @@
                 删除
               </a-button>
             </a-popconfirm>
-
           </a-space>
         </template>
       </a-table>
@@ -123,7 +122,6 @@ export default defineComponent({
 
     const handleQuery = (params: any) => {
       loading.value = true;
-
       axios.get("/ebook/list", {
         params: {
           page: params.page,
@@ -158,7 +156,7 @@ export default defineComponent({
       axios.post("/ebook/save", ebook.value).then((response) => {
         console.log("请求后");
         const data = response.data;  //data = commonResp
-        if (data.success) {
+        if(data.success){
           modalLoading.value = false;
           modalVisible.value = false;
           //重新加载列表
@@ -166,8 +164,10 @@ export default defineComponent({
             page: pagination.value.current,
             size: pagination.value.pageSize
           });
+
         }
       });
+
     };
 
     /**
@@ -192,7 +192,6 @@ export default defineComponent({
         const data = response.data;  //data = commonResp
         if (data.success) {
           //重新加载列表
-
           handleQuery({
             page: pagination.value.current,
             size: pagination.value.pageSize
