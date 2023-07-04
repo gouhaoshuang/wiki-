@@ -1,7 +1,12 @@
 package com.example.demo_3.req;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+
 public class EbookQueryReq extends PageReq {
+
     private Long id;
+
 
     private String name;
 
