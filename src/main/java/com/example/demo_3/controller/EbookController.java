@@ -6,10 +6,7 @@ import com.example.demo_3.resp.CommonResp;
 import com.example.demo_3.resp.EbookQueryResp;
 import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.service.EbookService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -30,6 +27,12 @@ public class EbookController {
     public CommonResp save(@RequestBody EbookSaveReq req){
         CommonResp resp = new CommonResp<>();
         ebookService.save(req);
+        return resp;
+    }
+    @DeleteMapping("/ebook/delete/{id}")
+    public CommonResp delete(@PathVariable Long id){
+        CommonResp resp = new CommonResp<>();
+        ebookService.delete(id);
         return resp;
     }
 }
