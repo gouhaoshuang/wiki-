@@ -18,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -44,7 +45,6 @@ public class DocService {
     public PageResp<DocQueryResp> list(DocQueryReq req){
 
         DocExample docExample = new DocExample();
-
         docExample.setOrderByClause("sort asc");
         DocExample.Criteria criteria = docExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())){
@@ -79,6 +79,16 @@ public class DocService {
     }
     public void delete(Long id){
         docMapper.deleteByPrimaryKey((id));
+    }
+
+    public void delete(List<String> ids){
+        List<Long> longIds = ids.stream().map(Long::valueOf).collect(Collectors.toList());
+
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+
+        criteria.andIdIn(longIds);
+        docMapper.deleteByExample((docExample));
     }
 
 

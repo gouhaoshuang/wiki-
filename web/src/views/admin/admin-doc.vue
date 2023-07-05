@@ -138,7 +138,6 @@ export default defineComponent({
      */
     const level1 = ref();
     const handleQuery = () => {
-
       level1.value = [];
       axios.get("/doc/all",).then((response) => {
         const data = response.data;
@@ -159,7 +158,7 @@ export default defineComponent({
      */
     //因为树选择的属性状态，会随当前编辑的节点而变化，所以单独申明一个响应式变量
 
-    const doc = ref({});
+    const doc = ref();
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
@@ -204,16 +203,45 @@ export default defineComponent({
       doc.value={
         ebookId: route.query.ebookId
       };
+
       treeSelectData.value = Tool.copy(level1.value);
       //为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
     }
+    const ids : Array<string>=[];
+    const getDeleteIds = (treeSelectData: any, id: any) => {
+      console.log(treeSelectData, id);
+      //遍历数组，级某一层节点
+      for (let i = 0; i < treeSelectData.length; i++) {
+        const node = treeSelectData[i];
+        if (node.id === id) {
+          //将目标id加入ids。
+          ids.push(id);
+          //遍历所有子节点
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            for (let j = 0; j < children.length; j++) {
+              getDeleteIds(children, children[j].id)
+            }
+          }
+        }else{
+          //如果当前节点不是目标节点，则到其子节点再找找看
+
+          const children = node.children;
+          if(Tool.isNotEmpty(children)){
+            getDeleteIds(children,id)
+          }
+        }
+      }
+    };
+
     /**
      *删除
      */
     const handleDelete = (id: number) => {
+      getDeleteIds(level1.value,id);
 
-      axios.delete("/doc/delete/" + id).then((response) => {
+      axios.delete("/doc/delete/" + ids.join(",")).then((response) => {
         const data = response.data;  //data = commonResp
         if (data.success) {
           //重新加载列表
@@ -222,13 +250,10 @@ export default defineComponent({
       });
     };
 
-    /**
-     *搜索
-     */
+
     /**
      * 将某节点及其子孙节点全部置位disabled
      */
-
     const setDisable = (treeSelectData: any, id: any) => {
       console.log(treeSelectData, id);
       //遍历数组，级某一层节点
@@ -245,20 +270,18 @@ export default defineComponent({
             for (let j = 0; j < children.length; j++) {
               setDisable(children, children[j].id)
             }
-          }else{
-            //如果当前节点不是目标节点，则到其子节点再找找看
+          }
+        }else{
+          //如果当前节点不是目标节点，则到其子节点再找找看
 
-            const children = node.children;
-            if(Tool.isNotEmpty(children)){
-              setDisable(children,id)
-            }
-
-
+          const children = node.children;
+          if(Tool.isNotEmpty(children)){
+            setDisable(children,id)
           }
         }
       }
-
     };
+
 
     onMounted(() => {
           handleQuery();
