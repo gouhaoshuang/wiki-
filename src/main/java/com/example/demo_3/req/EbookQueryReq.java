@@ -1,15 +1,21 @@
 package com.example.demo_3.req;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-
 public class EbookQueryReq extends PageReq {
 
     private Long id;
 
-
     private String name;
 
+
+    private Long category2Id;
+
+    public Long getCategory2Id() {
+        return category2Id;
+    }
+
+    public void setCategory2Id(Long category2Id) {
+        this.category2Id = category2Id;
+    }
 
     public Long getId() {
         return id;
@@ -29,14 +35,10 @@ public class EbookQueryReq extends PageReq {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append("]");
-
-        return sb.toString();
+        return "EbookQueryReq{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category2Id=" + category2Id +
+                '}';
     }
 }
