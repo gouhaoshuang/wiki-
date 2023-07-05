@@ -3,10 +3,12 @@
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
 
       <p>
-        <a-form layout="inline"  :model="param">
+        <a-form layout="inline" :model="param">
           <a-form-item>
             <a-input v-model:value="param.name" placeholder="按照名字来查询">
-              <template #prefix><SyncOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+              <template #prefix>
+                <SyncOutlined style="color: rgba(0, 0, 0, 0.25)"/>
+              </template>
             </a-input>
           </a-form-item>
           <a-form-item>
@@ -15,9 +17,9 @@
             </a-button>
           </a-form-item>
           <a-form-item>
-          <a-button type="primary" @click="add()" >
-            新增
-          </a-button>
+            <a-button type="primary" @click="add()">
+              新增
+            </a-button>
           </a-form-item>
         </a-form>
       </p>
@@ -35,14 +37,14 @@
           <img class="img" v-if="cover" :src="cover" alt="avatar"/>
         </template>
         <template v-slot:category="{text,record}">
-          <span>{{getCategoryName(record.category1Id)}} / {{getCategoryName(record.category2Id)}}</span>
+          <span>{{ getCategoryName(record.category1Id) }} / {{ getCategoryName(record.category2Id) }}</span>
         </template>
 
         <template v-slot:action="{ text, record }">
 
           <a-space size="small">
-            <router-link to="/admin/doc">
-              <a-button type="primary" >
+            <router-link :to="'/admin/doc?ebookId='+ record.id">
+              <a-button type="primary">
                 文档管理
               </a-button>
             </router-link>
@@ -53,9 +55,9 @@
                 title="删除后不可恢复，确认删除"
                 ok-text="是"
                 cancel-text="否"
-                @confirm= handleDelete(record.id)
+                @confirm=handleDelete(record.id)
             >
-              <a-button type="danger" >
+              <a-button type="danger">
                 删除
               </a-button>
             </a-popconfirm>
@@ -78,10 +80,10 @@
       </a-form-item>
       <a-form-item label="分类">
         <a-cascader
-         v-model:value="categoryIds"
-         :options="level1"
-         :field-names="{label:'name',value:'id',children:'children'}"
-         />
+            v-model:value="categoryIds"
+            :options="level1"
+            :field-names="{label:'name',value:'id',children:'children'}"
+        />
       </a-form-item>
       <a-form-item label="描述">
         <a-input v-model:value="ebook.description" type="text"/>
@@ -95,7 +97,7 @@
 <script lang="ts">
 import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
-import { message } from 'ant-design-vue';
+import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
 
 export default defineComponent({
@@ -123,7 +125,7 @@ export default defineComponent({
       },
       {
         title: '分类',
-        slots:{customRender: 'category'}
+        slots: {customRender: 'category'}
       },
       {
         title: '文档数',
@@ -153,18 +155,18 @@ export default defineComponent({
         params: {
           page: params.page,
           size: params.size,
-          name:param.value.name
+          name: param.value.name
         }
       }).then((response) => {
 
         loading.value = false;
         const data = response.data;
-        if(data.success){
+        if (data.success) {
           ebooks.value = data.content.list;
           //重置分页按钮
           pagination.value.current = params.pages;
           pagination.value.total = data.content.total;
-        }else {
+        } else {
           message.error(data.message);
         }
 
@@ -200,7 +202,7 @@ export default defineComponent({
       axios.post("/ebook/save", ebook.value).then((response) => {
 
         const data = response.data;  //data = commonResp
-        if(data.success){
+        if (data.success) {
           modalVisible.value = false;
           modalLoading.value = false;
           //重新加载列表
@@ -209,7 +211,7 @@ export default defineComponent({
             size: pagination.value.pageSize
           });
 
-        }else {
+        } else {
           message.error(data.message);
         }
       });
@@ -221,8 +223,8 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
-      ebook.value =Tool.copy(record) ;
-      categoryIds.value = [ebook.value.category1Id,ebook.value.category2Id]
+      ebook.value = Tool.copy(record);
+      categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
     };
     /**
      *新增
@@ -250,26 +252,26 @@ export default defineComponent({
      * 查询类别
      */
     const level1 = ref();
-    let categorys : any;
+    let categorys: any;
     const handleQueryCategory = () => {
       loading.value = true;
-      axios.get("/category/all", ).then((response) => {
+      axios.get("/category/all",).then((response) => {
         loading.value = false;
         const data = response.data;
-        if(data.success){
+        if (data.success) {
 
           categorys = data.content;
-          console.log("原始数组",categorys);
+          console.log("原始数组", categorys);
           level1.value = [];
-          level1.value = Tool.array2Tree(categorys,0);
-          console.log("树形结构",level1);
+          level1.value = Tool.array2Tree(categorys, 0);
+          console.log("树形结构", level1);
           //加载完分类后，在加载电子书，否则如果分类树加载很慢，则电子书渲染会报错
           handleQuery({
             page: 1,
             size: pagination.value.pageSize
           });
 
-        }else {
+        } else {
           message.error(data.message);
         }
       });
@@ -277,10 +279,10 @@ export default defineComponent({
     /**
      * 查询类别id对应的名字
      */
-    const getCategoryName = (cid:number)=>{
+    const getCategoryName = (cid: number) => {
       let result = "";
-      categorys.forEach((item:any)=>{
-        if(item.id===cid){
+      categorys.forEach((item: any) => {
+        if (item.id === cid) {
           result = item.name;
         }
       });

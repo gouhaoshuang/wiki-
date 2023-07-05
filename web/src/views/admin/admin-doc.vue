@@ -52,7 +52,7 @@
       <a-form-item label="名称">
         <a-input v-model:value="doc.name"/>
       </a-form-item>
-      <a-form-item label="名称">
+      <a-form-item label="父文档">
         <a-tree-select
             v-model:value="doc.parent"
             style="width: 100%"
@@ -67,19 +67,7 @@
 
       </a-form-item>
 
-      <a-form-item label="父文档">
-        <a-select
-            ref="select"
-            v-model:value="doc.parent"
-        >
-          <a-select-option value="0">
-            无
-          </a-select-option>
-          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="doc.id == c.id">
-            {{ c.name }}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
+
       <a-form-item label="顺序">
         <a-input v-model:value="doc.sort"/>
       </a-form-item>
@@ -95,11 +83,15 @@ import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'AdminDoc',
 
   setup() {
+    const route = useRoute();
+    console.log("路由",route);
+
     const param = ref();
     param.value = {};
     const docs = ref();
@@ -209,7 +201,9 @@ export default defineComponent({
      */
     const add = () => {
       modalVisible.value = true;
-
+      doc.value={
+        ebookId: route.query.ebookId
+      };
       treeSelectData.value = Tool.copy(level1.value);
       //为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
@@ -245,7 +239,6 @@ export default defineComponent({
           console.log("disabled", node);
           //将目标节点设置为disabled
           node.disabled=true;
-
           //遍历所有子节点，将所有的子节点都全部加上disabled
           const children = node.children;
           if (Tool.isNotEmpty(children)) {
