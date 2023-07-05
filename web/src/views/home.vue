@@ -1,15 +1,14 @@
 <template>
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
+
         <a-menu
             mode="inline"
             :style="{ height: '100%', borderRight: 0 }"
             @click="handleClick"
         >
           <a-menu-item key="welcome">
-            <router-link :to="'/'">
-              <MailOutLined/><span>欢迎</span>
-            </router-link>
+            <MailOutLined/><span>欢迎</span>
           </a-menu-item>
           <a-sub-menu v-for="item in level1" :key="item.id">
             <template v-slot:title>
@@ -23,7 +22,10 @@
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
-          <a-list item-layout="vertical" size="large"  :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+          <span v-show="isShowWelcome">
+            欢迎来到jiawa电子书系统
+          </span>
+          <a-list v-show="!isShowWelcome" item-layout="vertical" size="large"  :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
             <template #renderItem="{ item }">
               <a-list-item key="item.name">
                 <template #actions>
@@ -42,6 +44,7 @@
             </template>
           </a-list>
         </a-layout-content>
+
       </a-layout>
     </a-layout>
 </template>
@@ -87,9 +90,14 @@ export default defineComponent({
     /**
      * 调试函数
      */
-    const handleClick=()=>{
-      console.log("menu click")
+    const isShowWelcome = ref(true);
+    const handleClick=(value:any)=>{
+      // console.log("menu click",value)
+
+      isShowWelcome.value = value.key == "welcome";
     }
+
+
 
     onMounted(()=>{
       handleQueryCategory();
@@ -118,6 +126,8 @@ export default defineComponent({
       { type: 'LikeOutlined', text: '156' },
       { type: 'MessageOutlined', text: '2' },
     ],
+
+      isShowWelcome
     }
 
   }
