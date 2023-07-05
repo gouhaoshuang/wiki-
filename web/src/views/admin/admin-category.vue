@@ -137,6 +137,8 @@ export default defineComponent({
     const level1 = ref();
     const handleQuery = () => {
       loading.value = true;
+
+      level1.value = [];
       axios.get("/category/all", ).then((response) => {
 
         loading.value = false;
