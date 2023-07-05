@@ -23,6 +23,7 @@
           :loading="loading"
       >
         <template v-slot:action="{ text, record }">
+
           <a-space size="small">
             <a-button type="primary" @click="edit(record)">
               编辑
@@ -31,11 +32,15 @@
                 title="删除后不可恢复，确认删除"
                 ok-text="是"
                 cancel-text="否"
-                @confirm=handleDelete(record.id)
+                @confirm="showModal"
             >
-              <a-button type="danger">
+              <a-button type="danger" >
                 删除
               </a-button>
+              <a-modal v-model:visible="visible" title="再次确认" @ok="handleDelete(record.id)">
+                <p>删除操作非常危险，确定要删除吗</p>
+
+              </a-modal>
             </a-popconfirm>
           </a-space>
         </template>
@@ -121,6 +126,15 @@ export default defineComponent({
         slots: {customRender: 'action'}
       }
     ];
+
+    /*
+    删除提示对话框：
+     */
+    const visible =ref(false);
+    const showModal =()=>{
+
+      visible.value = true;
+    }
     /*
     *     数据查询
      */
@@ -136,6 +150,7 @@ export default defineComponent({
      *   }]
      * }]
      */
+
     const level1 = ref();
     const handleQuery = () => {
       level1.value = [];
@@ -245,6 +260,7 @@ export default defineComponent({
         const data = response.data;  //data = commonResp
         if (data.success) {
           //重新加载列表
+          visible.value = false;
           handleQuery();
         }
       });
@@ -294,6 +310,8 @@ export default defineComponent({
       level1,
       columns,
       loading,
+      showModal,
+      visible,
 
 
       edit,
