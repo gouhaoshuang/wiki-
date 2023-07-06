@@ -241,10 +241,3 @@ export default defineComponent({
 ;
 </script>
 
-<style scoped>
-.img {
-  width: 50px;
-  vertical-align: middle;
-  border-style: none;
-}
-</style>
