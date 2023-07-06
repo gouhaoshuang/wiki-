@@ -98,19 +98,20 @@
 </template>
 
 
-<script lang="ts">
+<script lang="ts" >
 import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
 import { useRoute } from 'vue-router';
-import E from "wangeditor"
+import E from 'wangeditor'
 
 export default defineComponent({
   name: 'AdminDoc',
 
   setup() {
 
+    // let editor = ref(null)
     const route = useRoute();
     console.log("路由",route);
 
@@ -157,7 +158,9 @@ export default defineComponent({
      *   }]
      * }]
      */
-    const doc = ref({name:"",parent:"",sort:0,ebookId:0})
+    // {name:"",parent:"",sort:0,ebookId:0}
+    const doc = ref();
+    doc.value={};
     const level1 = ref();
     level1.value = [];
 
@@ -178,32 +181,18 @@ export default defineComponent({
         }
       });
     };
+    handleQuery();
 
     /*
     ---------------表单---------------
      */
     //因为树选择的属性状态，会随当前编辑的节点而变化，所以单独申明一个响应式变量
 
-
-
     const modalVisible = ref(false);
     const modalLoading = ref(false);
 
-    const handleSave = () => {
-      modalLoading.value = true;
-      axios.post("/doc/save", doc.value).then((response) => {
+    const handleSave = ref(() => {});
 
-        const data = response.data;  //data = commonResp
-        if (data.success) {
-
-          handleQuery();
-
-        } else {
-          message.error(data.message);
-        }
-      });
-
-    };
 
     /**
      * 修改
@@ -220,13 +209,11 @@ export default defineComponent({
 
       //为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
-
     }
     /**
      *新增
      */
     const add = () => {
-
       // doc.value={
       //   ebookId: route.query.ebookId
       // };
@@ -313,13 +300,32 @@ export default defineComponent({
         }
       }
     };
+    console.log("fwefwefwe");
+    // setTimeout(function () {
+    //
+    //
+    // }, 1000);
 
 
     onMounted(() => {
-          const editor = new E("#content");
+          handleQuery();
+          const editor = new E(document.getElementById('content'));
           editor.config.zIndex = 0;
           editor.create();
-          handleQuery();
+          doc.value.content = editor.txt.html();
+          handleSave.value = () => {
+            doc.value.content = editor.txt.html();
+            modalLoading.value = true;
+
+            axios.post("/doc/save",doc.value).then((response) => {
+              const data = response.data;  //data = commonResp
+              if (data.success) {
+                handleQuery();
+              } else {
+                message.error(data.message);
+              }
+            });
+          };
         }
     )
 
