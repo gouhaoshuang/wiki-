@@ -2,8 +2,8 @@
   <a-layout>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
 
-      <a-row>
-        <a-col :span="4">
+      <a-row :gutter="24">
+        <a-col :span="8">
           <p>
             <a-form layout="inline"  :model="param">
               <a-form-item>
@@ -24,35 +24,47 @@
               :data-source="level1"
               :pagination="false"
               :loading="loading"
+              size="small"
           >
+
+            <template #name="{text,record}">
+              {{record.sort}}  {{text}}
+            </template>
+
             <template v-slot:action="{ text, record }">
               <a-space size="small">
-                <a-button type="primary" @click="edit(record)">
+                <a-button type="primary" @click="edit(record)" size="small">
                   编辑
                 </a-button>
                 <a-popconfirm
                     title="删除后不可恢复，确认删除"
                     ok-text="是"
                     cancel-text="否"
-                    @confirm="showModal"
+                    @confirm="handleDelete(record.id)"
                 >
-                  <a-button type="danger" >
-                    删除111
+                  <a-button type="danger" size="small">
+                    删除
                   </a-button>
-                  <a-modal v-model:visible="visible" title="再次确认" @ok="handleDelete(record.id)">
-                    <p>删除操作非常危险，确定要删除吗</p>
-                  </a-modal>
                 </a-popconfirm>
               </a-space>
             </template>
           </a-table>
         </a-col>
-        <a-col :span="20">
-          <a-form :model="doc" :label-col="{ span: 6} " :wrapperCol="{ span: 18} ">
-            <a-form-item label="名称">
-              <a-input v-model:value="doc.name"/>
+        <a-col :span="16">
+          <p>
+            <a-form layout="inline" :model="param">
+              <a-form-item>
+                <a-button type="primary" @click="handleSave()">
+                  保存
+                </a-button>
+              </a-form-item>
+            </a-form>
+          </p>
+          <a-form :model="doc" layout="vertical">
+            <a-form-item >
+              <a-input v-model:value="doc.name" placeholder="名称"/>
             </a-form-item>
-            <a-form-item label="父文档">
+            <a-form-item >
               <a-tree-select
                   v-model:value="doc.parent"
                   style="width: 100%"
@@ -64,10 +76,10 @@
               >
               </a-tree-select>
             </a-form-item>
-            <a-form-item label="顺序">
-            <a-input v-model:value="doc.sort"/>
+            <a-form-item >
+              <a-input v-model:value="doc.sort" placeholder="顺序"/>
             </a-form-item>
-            <a-form-item label="内容">
+            <a-form-item >
               <div id="content"></div>
             </a-form-item>
           </a-form>
@@ -101,6 +113,7 @@ export default defineComponent({
     console.log("路由",route);
 
 
+
     const param = ref();
     param.value = {};
     const docs = ref();
@@ -109,20 +122,8 @@ export default defineComponent({
 
       {
         title: '名称',
-        dataIndex: 'name'
-      },
-      {
-        title: '父文档',
-        key: 'parent',
-        dataIndex: 'parent'
-      },
-      {
-        title: '顺序',
-        dataIndex: 'sort'
-      },
-      {
-        title: '点赞数',
-        dataIndex: 'voteCount'
+        dataIndex: 'name',
+        slots: {customRender: 'name'}
       },
       {
         title: 'Action',
@@ -154,7 +155,7 @@ export default defineComponent({
      *   }]
      * }]
      */
-    const doc = ref({name:"",parent:"",sort:"",ebookId:0})
+    const doc = ref({name:"",parent:"",sort:0,ebookId:0})
     const level1 = ref();
 
 
@@ -167,7 +168,7 @@ export default defineComponent({
           console.log("原始数组", docs.value);
           level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
-          doc.value = data.content;
+
           console.log("树形结构", level1);
         } else {
           message.error(data.message);
@@ -185,15 +186,13 @@ export default defineComponent({
     const modalVisible = ref(false);
     const modalLoading = ref(false);
 
-    const handleModalOk = () => {
+    const handleSave = () => {
       modalLoading.value = true;
       axios.post("/doc/save", doc.value).then((response) => {
 
         const data = response.data;  //data = commonResp
         if (data.success) {
-          modalVisible.value = false;
-          modalLoading.value = false;
-          //重新加载列表
+
           handleQuery();
 
         } else {
@@ -224,18 +223,17 @@ export default defineComponent({
      *新增
      */
     const add = () => {
-      modalVisible.value = true;
+
       // doc.value={
       //   ebookId: route.query.ebookId
       // };
-
+      console.log("打印add")
+      doc.value = {name: "", parent: "", sort: 0, ebookId: 0};
       treeSelectData.value = Tool.copy(level1.value);
       //为选择树添加一个“无”
+      console.log("tree")
       treeSelectData.value.unshift({id: 0, name: '无'});
-      setTimeout(function (){
-        const editor = new E("#content");
-        editor.create();
-      },1000);
+
     }
     const ids : Array<string>=[];
     const getDeleteIds = (treeSelectData: any, id: any) => {
@@ -315,11 +313,9 @@ export default defineComponent({
 
 
     onMounted(() => {
-
-          setTimeout(function (){
-        const editor = new E("#content");
-        editor.create();
-      },100);
+          const editor = new E("#content");
+          editor.config.zIndex = 0;
+          editor.create();
           handleQuery();
         }
     )
@@ -339,7 +335,7 @@ export default defineComponent({
       handleDelete,
       handleQuery,
 
-      handleModalOk,
+      handleSave,
       modalVisible,
       modalLoading,
       doc,
