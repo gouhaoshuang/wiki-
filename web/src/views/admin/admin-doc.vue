@@ -173,46 +173,18 @@ export default defineComponent({
      */
     //因为树选择的属性状态，会随当前编辑的节点而变化，所以单独申明一个响应式变量
 
-    const modalVisible = ref(false);
-    const modalLoading = ref(false);
-
     const handleSave = ref(() => {
     });
     const handleQueryContent = ref(() => {
     });
-    /**
-     * 修改
-     */
+    const edit = ref((record: any) => {
+    });
+    const add = ref((record: any) => {
+    });
+
     const treeSelectData = ref();
-    // treeSelectData.value = [];
-    const edit = (record: any) => {
 
-      modalVisible.value = true;
-      doc.value = Tool.copy(record);
 
-      handleQueryContent.value();
-      //不能选择当前节点及其所有子孙节点
-      treeSelectData.value = Tool.copy(level1.value);
-      setDisable(treeSelectData.value, record.id);
-
-      //为选择树添加一个“无”
-      treeSelectData.value.unshift({id: 0, name: '无'});
-    }
-    /**
-     *新增
-     */
-    const add = () => {
-      // doc.value={
-      //   ebookId: route.query.ebookId
-      // };
-      console.log("打印add")
-      doc.value = {name: "", parent: "", sort: 0, ebookId: 0};
-      treeSelectData.value = Tool.copy(level1.value);
-      //为选择树添加一个“无”
-      console.log("tree")
-      treeSelectData.value.unshift({id: 0, name: '无'});
-
-    }
     const ids: Array<string> = [];
     const getDeleteIds = (treeSelectData: any, id: any) => {
       console.log(treeSelectData, id);
@@ -288,12 +260,6 @@ export default defineComponent({
         }
       }
     };
-    console.log("fwefwefwe");
-    // setTimeout(function () {
-    //
-    //
-    // }, 1000);
-
 
     onMounted(() => {
           handleQuery();
@@ -302,20 +268,41 @@ export default defineComponent({
           editor.create();
 
           //保存内容
-          doc.value.content = editor.txt.html();
           handleSave.value = () => {
             doc.value.content = editor.txt.html();
-            modalLoading.value = true;
 
             axios.post("/doc/save", doc.value).then((response) => {
               const data = response.data;  //data = commonResp
               if (data.success) {
+                message.success("保存成功")
                 handleQuery();
               } else {
                 message.error(data.message);
               }
             });
           };
+
+          //编辑内容
+          edit.value = (record: any) => {
+            editor.txt.html("");
+            doc.value = Tool.copy(record);
+            handleQueryContent.value();
+            //不能选择当前节点及其所有子孙节点
+            treeSelectData.value = Tool.copy(level1.value);
+            setDisable(treeSelectData.value, record.id);
+            //为选择树添加一个“无”
+            treeSelectData.value.unshift({id: 0, name: '无'});
+          }
+
+          //新增文档
+          add.value = () => {
+            editor.txt.html("");
+            doc.value = {name: "", parent: "", sort: 0, ebookId: 0};
+            treeSelectData.value = Tool.copy(level1.value);
+            //为选择树添加一个“无”
+            treeSelectData.value.unshift({id: 0, name: '无'});
+          }
+
           //查询富文本内容
           handleQueryContent.value = () => {
             axios.get("/doc/find-content/" + doc.value.id).then((response) => {
@@ -347,8 +334,8 @@ export default defineComponent({
       handleQuery,
 
       handleSave,
-      modalVisible,
-      modalLoading,
+
+
       doc,
       treeSelectData
     }
