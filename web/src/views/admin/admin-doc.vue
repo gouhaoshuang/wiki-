@@ -115,6 +115,8 @@ export default defineComponent({
     const route = useRoute();
     console.log("路由", route);
 
+    const treeSelectData = ref();
+    treeSelectData.value=[];
 
     const param = ref();
     param.value = {};
@@ -160,7 +162,10 @@ export default defineComponent({
           console.log("原始数组", docs.value);
           level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
-
+          //父文档下拉框初始化，相当于点击新增
+          treeSelectData.value = Tool.copy(level1.value);
+          //为选择树添加一个无
+          treeSelectData.value.unshift({id: 0, name: '无'});
           console.log("树形结构", level1);
         } else {
           message.error(data.message);
@@ -182,7 +187,6 @@ export default defineComponent({
     const add = ref((record: any) => {
     });
 
-    const treeSelectData = ref();
 
 
     const ids: Array<string> = [];
