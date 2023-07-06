@@ -296,8 +296,11 @@ export default defineComponent({
 
           //新增文档
           add.value = () => {
+            doc.value={
+              ebookId: route.query.ebookId
+            };
             editor.txt.html("");
-            doc.value = {name: "", parent: "", sort: 0, ebookId: 0};
+            // doc.value = {name: "", parent: "", sort: 0, ebookId: 0};
             treeSelectData.value = Tool.copy(level1.value);
             //为选择树添加一个“无”
             treeSelectData.value.unshift({id: 0, name: '无'});
