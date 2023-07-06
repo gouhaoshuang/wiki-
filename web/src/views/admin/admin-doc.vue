@@ -128,6 +128,7 @@ export default defineComponent({
     const param = ref();
     param.value = {};
     const docs = ref();
+
     const loading = ref(false);
     const columns = [
 
@@ -156,7 +157,9 @@ export default defineComponent({
      */
 
     const doc = ref();
-    doc.value = {};
+    doc.value = {
+      ebookId: route.query.ebookId
+    };
     const level1 = ref();
     level1.value = [];
 
