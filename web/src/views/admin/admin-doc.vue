@@ -82,12 +82,19 @@
               <a-input v-model:value="doc.sort" placeholder="顺序"/>
             </a-form-item>
             <a-form-item>
+              <a-button type="primary" @click="handlePreviewContent()">
+                <EyeOutlined /> 内容预览
+              </a-button>
+            </a-form-item>
+            <a-form-item>
               <div id="content"></div>
             </a-form-item>
           </a-form>
         </a-col>
       </a-row>
-
+      <a-drawer width="1200" placement="right" :closable="false" :visible="drawerVisible" @close="onDrawerClose">
+        <div class="wangeditor" :innerHTML="previewHtml"></div>
+      </a-drawer>
     </a-layout-content>
   </a-layout>
   <!--  <a-modal-->
@@ -265,6 +272,17 @@ export default defineComponent({
       }
     };
 
+    const handlePreviewContent = ref(() => {
+    });
+    // ----------------富文本预览--------------
+    const drawerVisible = ref(false);
+    const previewHtml = ref();
+
+
+    const onDrawerClose = () => {
+      drawerVisible.value = false;
+    };
+
     onMounted(() => {
           handleQuery();
           const editor = new E(document.getElementById('content'));
@@ -322,6 +340,13 @@ export default defineComponent({
             });
           };
 
+          //富文本内容预览
+           handlePreviewContent.value = () => {
+            const html = editor.txt.html();
+            previewHtml.value = html;
+            drawerVisible.value = true;
+          };
+
         }
     )
 
@@ -341,10 +366,15 @@ export default defineComponent({
       handleQuery,
 
       handleSave,
-
-
       doc,
-      treeSelectData
+      treeSelectData,
+
+
+      handlePreviewContent,
+      previewHtml,
+      drawerVisible,
+      onDrawerClose
+
     }
   }
 })
