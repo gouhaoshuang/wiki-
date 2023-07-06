@@ -5,7 +5,7 @@
       <a-row :gutter="24">
         <a-col :span="8">
           <p>
-            <a-form layout="inline"  :model="param">
+            <a-form layout="inline" :model="param">
               <a-form-item>
                 <a-button type="primary" @click="handleQuery">
                   查询
@@ -30,7 +30,7 @@
           >
 
             <template #name="{text,record}">
-              {{record.sort}}  {{text}}
+              {{ record.sort }} {{ text }}
             </template>
 
             <template v-slot:action="{ text, record }">
@@ -63,10 +63,10 @@
             </a-form>
           </p>
           <a-form :model="doc" layout="vertical">
-            <a-form-item >
+            <a-form-item>
               <a-input v-model:value="doc.name" placeholder="名称"/>
             </a-form-item>
-            <a-form-item >
+            <a-form-item>
               <a-tree-select
                   v-model:value="doc.parent"
                   style="width: 100%"
@@ -78,10 +78,10 @@
               >
               </a-tree-select>
             </a-form-item>
-            <a-form-item >
+            <a-form-item>
               <a-input v-model:value="doc.sort" placeholder="顺序"/>
             </a-form-item>
-            <a-form-item >
+            <a-form-item>
               <div id="content"></div>
             </a-form-item>
           </a-form>
@@ -90,20 +90,20 @@
 
     </a-layout-content>
   </a-layout>
-<!--  <a-modal-->
-<!--      title="文档表单"-->
-<!--      v-model:visible="modalVisible"-->
-<!--      @ok="handleModalOk">-->
-<!--  </a-modal>-->
+  <!--  <a-modal-->
+  <!--      title="文档表单"-->
+  <!--      v-model:visible="modalVisible"-->
+  <!--      @ok="handleModalOk">-->
+  <!--  </a-modal>-->
 </template>
 
 
-<script lang="ts" >
+<script lang="ts">
 import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
-import { useRoute } from 'vue-router';
+import {useRoute} from 'vue-router';
 import E from 'wangeditor'
 
 export default defineComponent({
@@ -113,8 +113,7 @@ export default defineComponent({
 
     // let editor = ref(null)
     const route = useRoute();
-    console.log("路由",route);
-
+    console.log("路由", route);
 
 
     const param = ref();
@@ -138,8 +137,8 @@ export default defineComponent({
     /*
     删除提示对话框：
      */
-    const visible =ref(false);
-    const showModal =()=>{
+    const visible = ref(false);
+    const showModal = () => {
 
       visible.value = true;
     }
@@ -147,23 +146,10 @@ export default defineComponent({
     *     数据查询
      */
 
-    /**
-     * 一级文档，children属性就是二级文档
-     * [{
-     *   id:"",
-     *   name:"",
-     *   children:[{
-     *     id:"",
-     *     name:"",
-     *   }]
-     * }]
-     */
-    // {name:"",parent:"",sort:0,ebookId:0}
     const doc = ref();
-    doc.value={};
+    doc.value = {};
     const level1 = ref();
     level1.value = [];
-
 
     const handleQuery = () => {
       level1.value = [];
@@ -181,7 +167,6 @@ export default defineComponent({
         }
       });
     };
-    handleQuery();
 
     /*
     ---------------表单---------------
@@ -191,18 +176,21 @@ export default defineComponent({
     const modalVisible = ref(false);
     const modalLoading = ref(false);
 
-    const handleSave = ref(() => {});
-
-
+    const handleSave = ref(() => {
+    });
+    const handleQueryContent = ref(() => {
+    });
     /**
      * 修改
      */
     const treeSelectData = ref();
     // treeSelectData.value = [];
     const edit = (record: any) => {
-      modalVisible.value = true;
 
+      modalVisible.value = true;
       doc.value = Tool.copy(record);
+
+      handleQueryContent.value();
       //不能选择当前节点及其所有子孙节点
       treeSelectData.value = Tool.copy(level1.value);
       setDisable(treeSelectData.value, record.id);
@@ -225,7 +213,7 @@ export default defineComponent({
       treeSelectData.value.unshift({id: 0, name: '无'});
 
     }
-    const ids : Array<string>=[];
+    const ids: Array<string> = [];
     const getDeleteIds = (treeSelectData: any, id: any) => {
       console.log(treeSelectData, id);
       //遍历数组，级某一层节点
@@ -241,12 +229,12 @@ export default defineComponent({
               getDeleteIds(children, children[j].id)
             }
           }
-        }else{
+        } else {
           //如果当前节点不是目标节点，则到其子节点再找找看
 
           const children = node.children;
-          if(Tool.isNotEmpty(children)){
-            getDeleteIds(children,id)
+          if (Tool.isNotEmpty(children)) {
+            getDeleteIds(children, id)
           }
         }
       }
@@ -257,7 +245,7 @@ export default defineComponent({
      */
     const handleDelete = (id: number) => {
       console.log("点击删除");
-      getDeleteIds(level1.value,id);
+      getDeleteIds(level1.value, id);
 
       axios.delete("/doc/delete/" + ids.join(",")).then((response) => {
         const data = response.data;  //data = commonResp
@@ -282,7 +270,7 @@ export default defineComponent({
           //如果当前节点就是目标节点
           console.log("disabled", node);
           //将目标节点设置为disabled
-          node.disabled=true;
+          node.disabled = true;
           //遍历所有子节点，将所有的子节点都全部加上disabled
           const children = node.children;
           if (Tool.isNotEmpty(children)) {
@@ -290,12 +278,12 @@ export default defineComponent({
               setDisable(children, children[j].id)
             }
           }
-        }else{
+        } else {
           //如果当前节点不是目标节点，则到其子节点再找找看
 
           const children = node.children;
-          if(Tool.isNotEmpty(children)){
-            setDisable(children,id)
+          if (Tool.isNotEmpty(children)) {
+            setDisable(children, id)
           }
         }
       }
@@ -312,12 +300,14 @@ export default defineComponent({
           const editor = new E(document.getElementById('content'));
           editor.config.zIndex = 0;
           editor.create();
+
+          //保存内容
           doc.value.content = editor.txt.html();
           handleSave.value = () => {
             doc.value.content = editor.txt.html();
             modalLoading.value = true;
 
-            axios.post("/doc/save",doc.value).then((response) => {
+            axios.post("/doc/save", doc.value).then((response) => {
               const data = response.data;  //data = commonResp
               if (data.success) {
                 handleQuery();
@@ -326,6 +316,18 @@ export default defineComponent({
               }
             });
           };
+          //查询富文本内容
+          handleQueryContent.value = () => {
+            axios.get("/doc/find-content/" + doc.value.id).then((response) => {
+              const data = response.data;
+              if (data.success) {
+                editor.txt.html(data.content)
+              } else {
+                message.error(data.message);
+              }
+            });
+          };
+
         }
     )
 
@@ -349,9 +351,7 @@ export default defineComponent({
       modalLoading,
       doc,
       treeSelectData
-
     }
-
   }
 })
 ;
