@@ -1,6 +1,7 @@
 package com.example.demo_3.controller;
 
 import com.example.demo_3.req.UserQueryReq;
+import com.example.demo_3.req.UserResetPasswordReq;
 import com.example.demo_3.req.UserSaveReq;
 import com.example.demo_3.resp.CommonResp;
 import com.example.demo_3.resp.PageResp;
@@ -31,6 +32,15 @@ public class UserController {
         System.out.println(req.getPassword());
         CommonResp resp = new CommonResp<>();
         userService.save(req);
+        return resp;
+    }
+
+    @PostMapping("/user/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req){
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        System.out.println(req.getPassword());
+        CommonResp resp = new CommonResp<>();
+        userService.resetPassword(req);
         return resp;
     }
 
