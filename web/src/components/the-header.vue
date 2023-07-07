@@ -5,10 +5,12 @@
         theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
+        :multiple=false
     >
       <a-menu-item key="/">
         <router-link to="/">首页</router-link>
       </a-menu-item>
+
       <a-menu-item key="/admin/user">
         <router-link to="/admin/user">用户管理</router-link>
       </a-menu-item>
@@ -21,9 +23,9 @@
       <a-menu-item key="/about">
         <router-link to="/about">关于我们</router-link>
       </a-menu-item>
-      <a-menu-item>
-        <a class="login-menu" @click="showLoginModal">登录</a>
-      </a-menu-item>
+
+      <a  class="login-menu"  v-show="!user.id" @click="showLoginModal" >login</a>
+      <a  class="login-menu"  v-show="user.id"  >{{user.name}}</a>
 
     </a-menu>
 
@@ -64,10 +66,15 @@ export default defineComponent({
     /**
      * 登录模态框打开
      */
+        // 登录后保存
+    const user = ref();
+    user.value={};
+
+    // 用来登录
     const loginUser = ref({
-      loginName:"test",
-      password:"test"
-    })
+      loginName: "test",
+      password: "test"
+    });
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
     const showLoginModal = () => {
@@ -85,6 +92,7 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
+          user.value=data.content;
 
           // store.commit("setUser", data.content);
         } else {
@@ -99,7 +107,8 @@ export default defineComponent({
       loginModalVisible,
       loginModalLoading,
       login,
-      loginUser
+      loginUser,
+      user
 
     }
   }
@@ -110,7 +119,9 @@ export default defineComponent({
 
 <style>
 .login-menu {
-//margin-right: 100px; float: right; color: white;
+  float: right;
+  color: white;
+  padding-left: 10px;
 }
 </style>
 
