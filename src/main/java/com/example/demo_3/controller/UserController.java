@@ -9,6 +9,10 @@ import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.resp.UserLoginResp;
 import com.example.demo_3.resp.UserQueryResp;
 import com.example.demo_3.service.UserService;
+import com.example.demo_3.util.SnowFlake;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +23,13 @@ import javax.validation.Valid;
 public class UserController {
     @Resource
     private UserService userService;
+    @Resource
+    private RedisTemplate redisTemplate;
 
+    @Resource
+    private SnowFlake snowFlake;
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
     @GetMapping("/user/list")
     public CommonResp list(@Valid  UserQueryReq req){
         CommonResp<PageResp<UserQueryResp>> resp = new CommonResp<>();
@@ -58,6 +68,7 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp<UserLoginResp> resp = new CommonResp<>();
         UserLoginResp userLoginResp = userService.login(req);
+
 
 //        Long token = snowFlake.nextId();
 //        LOG.info("生成单点登录token：{}，并放入redis中", token);
