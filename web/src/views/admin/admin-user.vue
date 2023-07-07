@@ -54,7 +54,7 @@
   </a-layout>
 
   <a-modal
-      title="用户表单"
+      title="新增表单"
       v-model:visible="modalVisible"
       :confirm-loading="modalLoading"
       @ok="handleModalOk"
@@ -72,8 +72,7 @@
     </a-form>
   </a-modal>
 
-  <a-modal
-      title="重置密码"
+  <a-modal title="重置密码"
       v-model:visible="resetModalVisible"
       :confirm-loading="resetModalLoading"
       @ok="handleResetModalOk"
