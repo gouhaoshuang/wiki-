@@ -23,18 +23,20 @@
       <a-menu-item key="/about">
         <router-link to="/about">关于我们</router-link>
       </a-menu-item>
-      <a-popconfirm
-          title="确认退出登录?"
-          ok-text="是"
-          cancel-text="否"
-          @confirm="logout()"
-      >
-        <a class="login-menu" v-show="user.id">
-          <span>退出登录</span>
-        </a>
-      </a-popconfirm>
-      <a  class="login-menu"  v-show="!user.id" @click="showLoginModal" >login</a>
-      <a   class="login-menu" v-show="user.id"  >{{user.name}}</a>
+      <a-menu-item key="logout" v-if="user.id">
+        <a-popconfirm
+            title="确认退出登录?"
+            ok-text="是"
+            cancel-text="否"
+            @confirm="logout"
+        >
+          <span>你好：{{user.name}} </span>
+        </a-popconfirm>
+      </a-menu-item>
+
+      <a-menu-item key="login" @click="showLoginModal" v-else>
+        <span>登录</span>
+      </a-menu-item>
 
     </a-menu>
 
