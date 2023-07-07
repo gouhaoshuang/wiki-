@@ -48,14 +48,21 @@
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
+import axios from 'axios';
+import {message} from 'ant-design-vue';
+
+declare let hexMd5: any;
+declare let KEY: any;
 
 export default defineComponent({
   name: 'the-header',
 
   setup() {
 
+
+
     /**
-     * 登录
+     * 登录模态框打开
      */
     const loginUser = ref({
       loginName:"test",
@@ -67,12 +74,24 @@ export default defineComponent({
       loginModalVisible.value = true;
     }
 
-    const login=()=>{
-      console.log("开始登陆")
-      loginModalVisible.value = false;
-      loginModalLoading.value = false;
+    // 登录开始
+    const login = () => {
+      console.log("开始登录");
+      loginModalLoading.value = true;
+      loginUser.value.password = hexMd5(loginUser.value.password + KEY);
+      axios.post('/user/login', loginUser.value).then((response) => {
+        loginModalLoading.value = false;
+        const data = response.data;
+        if (data.success) {
+          loginModalVisible.value = false;
+          message.success("登录成功！");
 
-    }
+          // store.commit("setUser", data.content);
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
 
 
     return{

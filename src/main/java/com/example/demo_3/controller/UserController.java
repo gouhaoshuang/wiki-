@@ -53,7 +53,7 @@ public class UserController {
         return resp;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public CommonResp login(@Valid @RequestBody UserLoginReq req) {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp<UserLoginResp> resp = new CommonResp<>();
