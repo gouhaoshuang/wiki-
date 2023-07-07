@@ -5,6 +5,7 @@ import com.example.demo_3.domain.Doc;
 import com.example.demo_3.domain.DocExample;
 import com.example.demo_3.mapper.ContentMapper;
 import com.example.demo_3.mapper.DocMapper;
+import com.example.demo_3.mapper.DocMapperCust;
 import com.example.demo_3.req.DocQueryReq;
 import com.example.demo_3.req.DocSaveReq;
 import com.example.demo_3.resp.DocQueryResp;
@@ -31,6 +32,9 @@ public class DocService {
     @Resource
     private ContentMapper contentMapper;
 
+    @Resource
+    private DocMapperCust docMapperCust;
+
     private static final Logger LOG = LoggerFactory.getLogger(DocService.class);
 
     @Resource
@@ -40,6 +44,17 @@ public class DocService {
         DocExample docExample = new DocExample();
         docExample.createCriteria().andEbookIdEqualTo(ebookId);
         docExample.setOrderByClause("sort asc");
+        List<Doc> docList = docMapper.selectByExample(docExample);
+
+        // 列表复制
+        List<DocQueryResp> list = CopyUtil.copyList(docList, DocQueryResp.class);
+
+        return list;
+    }
+    //按照id来查询
+    public List<DocQueryResp> selectById(Long Id) {
+        DocExample docExample = new DocExample();
+        docExample.createCriteria().andIdEqualTo(Id);
         List<Doc> docList = docMapper.selectByExample(docExample);
 
         // 列表复制
@@ -80,9 +95,12 @@ public class DocService {
         if(ObjectUtils.isEmpty(req.getId())){
             //新增
             doc.setId(snowFlake.nextId());
+            doc.setViewCount("0");
+            doc.setVoteCount("0");
             docMapper.insert(doc);
 
             content.setId(doc.getId());
+
             contentMapper.insert(content);
 
         }else {
@@ -112,7 +130,7 @@ public class DocService {
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
         // 文档阅读数+1
-//        docMapperCust.increaseViewCount(id);
+        docMapperCust.increaseViewCount(id);
         if (ObjectUtils.isEmpty(content)) {
             return "";
         } else {
