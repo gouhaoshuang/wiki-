@@ -2,6 +2,8 @@ package com.example.demo_3.service;
 
 import com.example.demo_3.domain.User;
 import com.example.demo_3.domain.UserExample;
+import com.example.demo_3.exeception.BusinessException;
+import com.example.demo_3.exeception.BusinessExceptionCode;
 import com.example.demo_3.mapper.UserMapper;
 import com.example.demo_3.req.UserQueryReq;
 import com.example.demo_3.req.UserSaveReq;
@@ -68,13 +70,35 @@ public class UserService {
     public void save(UserSaveReq req){
         User user = CopyUtil.copy(req,User.class);
         if(ObjectUtils.isEmpty(req.getId())){
-            user.setId(snowFlake.nextId());
-            userMapper.insert(user);
-
+            User userDB = selectByLoginName(user.getLoginName());
+            if(ObjectUtils.isEmpty(userDB)){
+                //插入
+                user.setId(snowFlake.nextId());
+                userMapper.insert(user);
+            }else{
+                //用户名已存在
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
         }else {
             userMapper.updateByPrimaryKey(user);
         }
     }
+    public User selectByLoginName (String LoginName){
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(LoginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+
+        if(!ObjectUtils.isEmpty(userList)){
+            return null;
+        }else{
+            return userList.get(0);
+        }
+    }
+
+
+
+
     public void delete(Long id){
         userMapper.deleteByPrimaryKey((id));
     }
