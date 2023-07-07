@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center">
-    jiawa知识库系统   欢迎：{{user.name}}
+    jiawa知识库系统<span v-show="user.name"> 欢迎：{{user.name}}</span>
   </a-layout-footer>
 </template>
 
