@@ -3,9 +3,10 @@ package com.example.demo_3.controller;
 import com.example.demo_3.req.UserQueryReq;
 import com.example.demo_3.req.UserSaveReq;
 import com.example.demo_3.resp.CommonResp;
-import com.example.demo_3.resp.UserQueryResp;
 import com.example.demo_3.resp.PageResp;
+import com.example.demo_3.resp.UserQueryResp;
 import com.example.demo_3.service.UserService;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,6 +27,8 @@ public class UserController {
     }
     @PostMapping("/user/save")
     public CommonResp save(@Valid @RequestBody UserSaveReq req){
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        System.out.println(req.getPassword());
         CommonResp resp = new CommonResp<>();
         userService.save(req);
         return resp;

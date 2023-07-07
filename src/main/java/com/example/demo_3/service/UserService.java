@@ -16,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -39,9 +40,6 @@ public class UserService {
 
             criteria.andLoginNameEqualTo(req.getLoginName());
         }
-//        if(!ObjectUtils.isEmpty(req.getCategory2Id())){
-//            criteria.andCategory2IdEqualTo(req.getCategory2Id());
-//        }
         PageHelper.startPage(req.getPage(), req.getSize());
         List<User> userList = userMapper.selectByExample(userExample);
 
@@ -71,8 +69,12 @@ public class UserService {
         User user = CopyUtil.copy(req,User.class);
         if(ObjectUtils.isEmpty(req.getId())){
             User userDB = selectByLoginName(user.getLoginName());
+
+            System.out.println("userDB-:***************                 :"+userDB);
+
             if(ObjectUtils.isEmpty(userDB)){
                 //插入
+                System.out.println("是否需要插入");
                 user.setId(snowFlake.nextId());
                 userMapper.insert(user);
             }else{
@@ -92,9 +94,9 @@ public class UserService {
         criteria.andLoginNameEqualTo(LoginName);
         List<User> userList = userMapper.selectByExample(userExample);
 
-        if(!ObjectUtils.isEmpty(userList)){
+        if (CollectionUtils.isEmpty(userList)) {
             return null;
-        }else{
+        } else {
             return userList.get(0);
         }
     }
