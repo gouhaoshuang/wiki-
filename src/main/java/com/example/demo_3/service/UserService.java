@@ -138,11 +138,31 @@ public class UserService {
         userDB.setToken(token.toString());
         userMapper.updateByPrimaryKey(userDB);
     }
+
+    //删除token
+    public void deleteToken(String token) {
+        User userDB = selectByToken(token);
+        userDB.setToken(null);
+        userMapper.updateByPrimaryKey(userDB);
+    }
     public User selectByLoginName(String LoginName) {
 
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andLoginNameEqualTo(LoginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+
+        if (CollectionUtils.isEmpty(userList)) {
+            return null;
+        } else {
+            return userList.get(0);
+        }
+    }
+    public User selectByToken(String token) {
+
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andTokenEqualTo(token);
         List<User> userList = userMapper.selectByExample(userExample);
 
         if (CollectionUtils.isEmpty(userList)) {
