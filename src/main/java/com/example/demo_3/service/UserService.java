@@ -85,6 +85,7 @@ public class UserService {
             //更新，现将LoginName清空，然后使用updateByPrimaryKeySelective，
             //只更新有值的属性，如果没有值的话，就不更新这个字段。
             user.setLoginName(null);
+            user.setPassword(null);
             userMapper.updateByPrimaryKeySelective(user);
         }
     }
