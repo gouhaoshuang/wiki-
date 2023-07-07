@@ -67,15 +67,23 @@ public class UserController {
     public CommonResp login(@Valid @RequestBody UserLoginReq req) {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp<UserLoginResp> resp = new CommonResp<>();
+
+
+
         UserLoginResp userLoginResp = userService.login(req);
 
 
-//        Long token = snowFlake.nextId();
+        Long token = snowFlake.nextId();
+
 //        LOG.info("生成单点登录token：{}，并放入redis中", token);
-//        userLoginResp.setToken(token.toString());
+        userService.saveToken(req,token);
+
+        userLoginResp.setToken(token.toString());
 //        redisTemplate.opsForValue().set(token.toString(), JSONObject.toJSONString(userLoginResp), 3600 * 24, TimeUnit.SECONDS);
 
         resp.setContent(userLoginResp);
         return resp;
     }
+
+
 }

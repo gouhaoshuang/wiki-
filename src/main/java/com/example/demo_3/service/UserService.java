@@ -92,18 +92,6 @@ public class UserService {
         }
     }
 
-    public User selectByLoginName(String LoginName) {
-        UserExample userExample = new UserExample();
-        UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andLoginNameEqualTo(LoginName);
-        List<User> userList = userMapper.selectByExample(userExample);
-
-        if (CollectionUtils.isEmpty(userList)) {
-            return null;
-        } else {
-            return userList.get(0);
-        }
-    }
 
 
     public void delete(Long id) {
@@ -141,4 +129,27 @@ public class UserService {
             }
         }
     }
+
+    //保存token
+    public void saveToken(UserLoginReq req, Long token) {
+
+        User user = CopyUtil.copy(req, User.class);
+        User userDB = selectByLoginName(user.getLoginName());
+        userDB.setToken(token.toString());
+        userMapper.updateByPrimaryKey(userDB);
+    }
+    public User selectByLoginName(String LoginName) {
+
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(LoginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+
+        if (CollectionUtils.isEmpty(userList)) {
+            return null;
+        } else {
+            return userList.get(0);
+        }
+    }
+
 }
