@@ -53,17 +53,17 @@ export default defineComponent({
 
     onMounted(() => {
       // WebSocket
-      if ('WebSocket' in window) {
-        token = Tool.uuid(10);
-        // 连接地址：ws://127.0.0.1:8880/ws/xxx
-        websocket = new WebSocket(process.env.VUE_APP_WS_SERVER + '/ws/' + token);
-        initWebSocket()
-
-        // 关闭
-        // websocket.close();
-      } else {
-        alert('当前浏览器 不支持')
-      }
+      // if ('WebSocket' in window) {
+      //   token = Tool.uuid(10);
+      //   // 连接地址：ws://127.0.0.1:8880/ws/xxx
+      //   websocket = new WebSocket(process.env.VUE_APP_WS_SERVER + '/ws/' + token);
+      //   initWebSocket()
+      //
+      //   // 关闭
+      //   // websocket.close();
+      // } else {
+      //   alert('当前浏览器 不支持')
+      // }
     });
 
     return {
