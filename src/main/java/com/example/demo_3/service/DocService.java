@@ -138,6 +138,20 @@ public class DocService {
         }
     }
 
+    /**
+     * 点赞
+     */
+    public void vote(Long id) {
+        // docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+            docMapperCust.increaseVoteCount(id);
+
+        // 推送消息
+//        Doc docDb = docMapper.selectByPrimaryKey(id);
+//        String logId = MDC.get("LOG_ID");
+//        wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+//        // rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
+    }
 
 
 }
