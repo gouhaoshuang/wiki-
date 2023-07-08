@@ -32,10 +32,18 @@
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
-                  <span v-for="{ type, text } in actions" :key="type">
-                    <component :is="type" style="margin-right: 6px"/>
-                    {{ text }}
-                  </span>
+              <span>
+                <component v-bind:is="'FileOutlined'" style="margin-right: 8px" />
+                {{ item.docCount }}
+              </span>
+                <span>
+                <component v-bind:is="'UserOutlined'" style="margin-right: 8px" />
+                {{ item.viewCount }}
+              </span>
+                <span>
+                <component v-bind:is="'LikeOutlined'" style="margin-right: 8px" />
+                {{ item.voteCount }}
+              </span>
               </template>
               <a-list-item-meta :description="item.description">
                 <template #title>
@@ -62,10 +70,13 @@ import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {Tool} from "@/util/tool";
 import {message} from "ant-design-vue";
+import {LikeOutlined, StarOutlined} from "@ant-design/icons-vue";
+
 
 
 export default defineComponent({
   name: 'Home',
+  methods: {LikeOutlined, StarOutlined},
 
   setup() {
     console.log("set up")
@@ -138,11 +149,7 @@ export default defineComponent({
         },
         pageSize: 6,
       },
-      actions: [
-        {type: 'StarOutlined', text: '156'},
-        {type: 'LikeOutlined', text: '156'},
-        {type: 'MessageOutlined', text: '2'},
-      ],
+
 
       isShowWelcome
     }
