@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.example.demo_3.domain.EbookSnapshot">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="ebook_id" jdbcType="BIGINT" property="ebookId" />
-    <result column="date" jdbcType="INTEGER" property="date" />
+    <result column="date" jdbcType="DATE" property="date" />
     <result column="view_count" jdbcType="INTEGER" property="viewCount" />
     <result column="vote_count" jdbcType="INTEGER" property="voteCount" />
     <result column="view_increase" jdbcType="INTEGER" property="viewIncrease" />
@@ -105,7 +105,7 @@
     insert into ebook_snapshot (id, ebook_id, `date`, 
       view_count, vote_count, view_increase, 
       vote_increase)
-    values (#{id,jdbcType=BIGINT}, #{ebookId,jdbcType=BIGINT}, #{date,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{ebookId,jdbcType=BIGINT}, #{date,jdbcType=DATE}, 
       #{viewCount,jdbcType=INTEGER}, #{voteCount,jdbcType=INTEGER}, #{viewIncrease,jdbcType=INTEGER}, 
       #{voteIncrease,jdbcType=INTEGER})
   </insert>
@@ -142,7 +142,7 @@
         #{ebookId,jdbcType=BIGINT},
       </if>
       <if test="date != null">
-        #{date,jdbcType=INTEGER},
+        #{date,jdbcType=DATE},
       </if>
       <if test="viewCount != null">
         #{viewCount,jdbcType=INTEGER},
@@ -174,7 +174,7 @@
         ebook_id = #{record.ebookId,jdbcType=BIGINT},
       </if>
       <if test="record.date != null">
-        `date` = #{record.date,jdbcType=INTEGER},
+        `date` = #{record.date,jdbcType=DATE},
       </if>
       <if test="record.viewCount != null">
         view_count = #{record.viewCount,jdbcType=INTEGER},
@@ -197,7 +197,7 @@
     update ebook_snapshot
     set id = #{record.id,jdbcType=BIGINT},
       ebook_id = #{record.ebookId,jdbcType=BIGINT},
-      `date` = #{record.date,jdbcType=INTEGER},
+      `date` = #{record.date,jdbcType=DATE},
       view_count = #{record.viewCount,jdbcType=INTEGER},
       vote_count = #{record.voteCount,jdbcType=INTEGER},
       view_increase = #{record.viewIncrease,jdbcType=INTEGER},
@@ -213,7 +213,7 @@
         ebook_id = #{ebookId,jdbcType=BIGINT},
       </if>
       <if test="date != null">
-        `date` = #{date,jdbcType=INTEGER},
+        `date` = #{date,jdbcType=DATE},
       </if>
       <if test="viewCount != null">
         view_count = #{viewCount,jdbcType=INTEGER},
@@ -233,7 +233,7 @@
   <update id="updateByPrimaryKey" parameterType="com.example.demo_3.domain.EbookSnapshot">
     update ebook_snapshot
     set ebook_id = #{ebookId,jdbcType=BIGINT},
-      `date` = #{date,jdbcType=INTEGER},
+      `date` = #{date,jdbcType=DATE},
       view_count = #{viewCount,jdbcType=INTEGER},
       vote_count = #{voteCount,jdbcType=INTEGER},
       view_increase = #{viewIncrease,jdbcType=INTEGER},

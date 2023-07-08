@@ -1,11 +1,13 @@
 package com.example.demo_3.domain;
 
+import java.util.Date;
+
 public class EbookSnapshot {
     private Long id;
 
     private Long ebookId;
 
-    private Integer date;
+    private Date date;
 
     private Integer viewCount;
 
@@ -31,11 +33,11 @@ public class EbookSnapshot {
         this.ebookId = ebookId;
     }
 
-    public Integer getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Integer date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
