@@ -8,9 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 @ComponentScan("com.example.demo_3")
 @SpringBootApplication
 @MapperScan("com.example.demo_3.mapper")
+@EnableScheduling
 public class Demo3Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Demo3Application.class);
