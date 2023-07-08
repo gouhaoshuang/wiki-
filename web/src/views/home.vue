@@ -24,9 +24,8 @@
     </a-layout-sider>
     <a-layout style="padding: 0 24px 24px">
       <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
-          <span v-show="isShowWelcome">
-            欢迎来到jiawa电子书系统
-          </span>
+         <TheWelcome></TheWelcome>
+
         <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }"
                 :data-source="ebooks">
           <template #renderItem="{ item }">
@@ -71,11 +70,14 @@ import axios from 'axios';
 import {Tool} from "@/util/tool";
 import {message} from "ant-design-vue";
 import {LikeOutlined, StarOutlined} from "@ant-design/icons-vue";
-
+import TheWelcome from "@/components/the-welcome.vue";
 
 
 export default defineComponent({
   name: 'Home',
+  components: {
+    TheWelcome
+  },
   methods: {LikeOutlined, StarOutlined},
 
   setup() {
