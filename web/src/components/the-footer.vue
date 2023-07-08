@@ -6,10 +6,10 @@
 
 
 <script lang="ts">
-import { defineComponent,computed, onMounted } from 'vue';
+import {defineComponent, computed, onMounted} from 'vue';
 import store from "@/store";
-import { notification } from 'ant-design-vue';
-import { Tool } from '@/util/tool';
+import {Tool} from "@/util/tool";
+import {message} from "ant-design-vue";
 export default defineComponent({
   name: 'the-footer',
   setup() {
@@ -22,6 +22,10 @@ export default defineComponent({
     };
     const onMessage = (event: any) => {
       console.log('WebSocket收到消息：', event.data);
+
+
+      message.success(event.data);
+
       // notification['info']({
       //   message: '收到消息',
       //   description: event.data,

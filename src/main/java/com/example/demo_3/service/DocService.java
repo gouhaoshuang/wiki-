@@ -12,6 +12,7 @@ import com.example.demo_3.resp.DocQueryResp;
 import com.example.demo_3.resp.PageResp;
 import com.example.demo_3.util.CopyUtil;
 import com.example.demo_3.util.SnowFlake;
+import com.example.demo_3.websocket.WebSocketServer;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+    @Resource
+    private WebSocketServer webSocketServer;
 
     public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
@@ -147,9 +150,9 @@ public class DocService {
             docMapperCust.increaseVoteCount(id);
 
         // 推送消息
-//        Doc docDb = docMapper.selectByPrimaryKey(id);
+        Doc docDb = docMapper.selectByPrimaryKey(id);
 //        String logId = MDC.get("LOG_ID");
-//        wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+        webSocketServer.sendInfo("【" + docDb.getName() + "】被点赞！");
 //        // rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
     }
 

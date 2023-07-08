@@ -8,7 +8,7 @@
           @click="handleClick"
       >
         <a-menu-item key="welcome">
-          <meh-outlined />
+          <MailOutLined/>
           <span>欢迎</span>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
@@ -16,7 +16,7 @@
             <span><user-outlined/>{{ item.name }}</span>
           </template>
           <a-menu-item v-for="child in item.children" :key="child.id">
-            <meh-outlined />
+            <MailOutLined/>
             <span>{{ child.name }}</span>
           </a-menu-item>
         </a-sub-menu>
@@ -79,7 +79,7 @@ export default defineComponent({
   methods: {LikeOutlined, StarOutlined},
 
   setup() {
-    // console.log("set up")
+    console.log("set up")
     const ebooks = ref();
 
     /**
@@ -95,10 +95,10 @@ export default defineComponent({
         if (data.success) {
 
           categorys = data.content;
-          // console.log("原始数组", categorys);
+          console.log("原始数组", categorys);
           level1.value = [];
           level1.value = Tool.array2Tree(categorys, 0);
-          // console.log("树形结构", level1);
+          console.log("树形结构", level1);
         } else {
           message.error(data.message);
         }
