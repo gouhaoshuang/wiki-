@@ -24,7 +24,9 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/doc/**",
                         "/doc/find-content/**",
                         "/ebook-snapshot/**",
-                        "/ebook-snapshot/**"
+                        "/ebook-snapshot/**",
+                        "/demo/**"
+
                 );
 
 
